@@ -3,13 +3,14 @@ Deno API Use std/http
 
 ## Dependencies
 
-denodb
+- denodb
 https://deno.land/x/denodb
 
-bcrypt
+- bcrypt
 https://deno.land/x/bcrypt
 
 
 ## Reference
-nativerouter
+
+- nativerouter
 https://deno.land/x/nativerouter
