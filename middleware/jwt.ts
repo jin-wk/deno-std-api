@@ -24,7 +24,13 @@ export async function jwtAuth(req: Request): Promise<Response | null> {
     .get(jwtConfig.header)
     ?.replace(`${jwtConfig.schema} `, "");
 
-  if (!token || !(await jose.jwtVerify(token, jwtConfig.secret))) {
+  if (!token) {
+    return response(401, "Unauthorized");
+  }
+
+  try {
+    await jose.jwtVerify(token, jwtConfig.secret);
+  } catch (_) {
     return response(401, "Unauthorized");
   }
 

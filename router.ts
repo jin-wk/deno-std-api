@@ -59,9 +59,9 @@ export class Router {
         const params = r.pattern.exec(req.url).pathname.groups;
         try {
           if (r["middleware"]) {
-            const next = await r["middleware"](req);
-            if (next) {
-              return next;
+            const error = await r["middleware"](req);
+            if (error) {
+              return error;
             }
           }
           return await r["handler"](req, params);
