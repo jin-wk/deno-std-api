@@ -9,6 +9,11 @@ https://deno.land/x/denodb
 - bcrypt
 https://deno.land/x/bcrypt
 
+- validasaur
+https://deno.land/x/validasaur
+
+- jose
+https://deno.land/x/jose
 
 ## Reference
 
