@@ -11,6 +11,11 @@ export class User extends Model {
     password: DataTypes.STRING,
     name: DataTypes.STRING,
   };
+
+  id!: number;
+  email!: string;
+  password!: string;
+  name!: string;
 }
 
 db.link([User]);

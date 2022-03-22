@@ -6,6 +6,8 @@ type CallbackHandler = (
   params: Record<string, string>
 ) => Promise<Response>;
 
+type Middleware = (request: Request) => Promise<Response | null>;
+
 const METHODS: Record<string, string> = {
   GET: "GET",
   POST: "POST",
@@ -22,27 +24,33 @@ export class Router {
     }
   }
 
-  private add(method: string, pathname: string, handler: CallbackHandler) {
+  private add(
+    method: string,
+    pathname: string,
+    handler: CallbackHandler,
+    middleware?: Middleware
+  ) {
     this.routes[method].push({
       pattern: new URLPattern({ pathname }),
       handler,
+      middleware,
     });
   }
 
-  get(pathname: string, handler: CallbackHandler) {
-    this.add(METHODS.GET, pathname, handler);
+  get(pathname: string, handler: CallbackHandler, middleware?: Middleware) {
+    this.add(METHODS.GET, pathname, handler, middleware);
   }
 
-  post(pathname: string, handler: CallbackHandler) {
-    this.add(METHODS.POST, pathname, handler);
+  post(pathname: string, handler: CallbackHandler, middleware?: Middleware) {
+    this.add(METHODS.POST, pathname, handler, middleware);
   }
 
-  put(pathname: string, handler: CallbackHandler) {
-    this.add(METHODS.PUT, pathname, handler);
+  put(pathname: string, handler: CallbackHandler, middleware?: Middleware) {
+    this.add(METHODS.PUT, pathname, handler, middleware);
   }
 
-  delete(pathname: string, handler: CallbackHandler) {
-    this.add(METHODS.DELETE, pathname, handler);
+  delete(pathname: string, handler: CallbackHandler, middleware?: Middleware) {
+    this.add(METHODS.DELETE, pathname, handler, middleware);
   }
 
   async route(req: Request): Promise<Response> {
@@ -50,12 +58,19 @@ export class Router {
       if (r.pattern.test(req.url)) {
         const params = r.pattern.exec(req.url).pathname.groups;
         try {
+          if (r["middleware"]) {
+            const next = await r["middleware"](req);
+            if (next) {
+              return next;
+            }
+          }
           return await r["handler"](req, params);
-        } catch (_err) {
-          return response(500, "Internal Server Error", null);
+        } catch (err) {
+          console.log(err);
+          return response(500, "Internal Server Error");
         }
       }
     }
-    return response(404, "Not found", null);
+    return response(404, "Not found");
   }
 }

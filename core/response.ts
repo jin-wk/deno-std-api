@@ -1,9 +1,9 @@
-import { Model } from "../deps.ts";
+import { Model, ValidationErrors } from "../deps.ts";
 
 export function response(
   status: number,
   message: string,
-  data?: Model | null | undefined
+  data?: Model | ValidationErrors | null | undefined
 ) {
   return new Response(
     JSON.stringify({
