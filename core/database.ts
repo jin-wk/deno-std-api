@@ -1,4 +1,4 @@
-import "https://deno.land/x/dotenv@v3.1.0/load.ts";
+import "https://deno.land/std@0.132.0/dotenv/load.ts";
 import { MySQLConnector, Database } from "../deps.ts";
 
 export let db: Database;
