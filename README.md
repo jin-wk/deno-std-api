@@ -1,5 +1,5 @@
 # deno-std-api
-Deno API Use std/http
+Deno API Sample Use std/http
 
 ## Dependencies
 
